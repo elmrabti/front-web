@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {ProductsService} from "../../services/products.service";
 import {Product} from "../../model/product.model";
-import {Observable} from "rxjs";
+import {catchError, map, Observable, of, startWith} from "rxjs";
+import {AppDataState, DataStateEnum} from "../../state/product.state";
 
 @Component({
   selector: 'app-products',
@@ -14,7 +15,8 @@ export class ProductsComponent {
 
   // products: Product[]|null = null ;
   // products?: Product[];
-  products$:Observable<Product[]>| null = null ;
+  products$:Observable<AppDataState<Product[]>>| null = null ;
+  readonly DataStateEnum=DataStateEnum;
 
   ngOnInit():void{
 
@@ -24,7 +26,14 @@ export class ProductsComponent {
     // this.productsService.getAllProducts().subscribe(data=>{
     //   this.products = data ;
     // })
-    this.products$= this.productsService.getAllProducts()
+    this.products$=
+      this.productsService.getAllProducts().pipe(
+        map(data=>({dataState:DataStateEnum.LOADED, data:data})),
+        startWith({dataState: DataStateEnum.LOADING}),
+        catchError(err => of({dataState: DataStateEnum.ERROR}))
+      );
 
   }
+
+  // protected readonly DataStateEnum = DataStateEnum;
 }
