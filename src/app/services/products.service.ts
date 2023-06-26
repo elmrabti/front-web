@@ -10,7 +10,7 @@ export class ProductsService{
   }
 
   getAllProducts():Observable<Product[]>{
-    let host:string=environment.host
+    let host:string=(Math.random()>0.2)? environment.host: environment.unreachable ;
     return this.http.get<Product[]>(host+"/products");
   }
 
@@ -23,6 +23,11 @@ export class ProductsService{
   getAvailableProducts():Observable<Product[]>{
     let host = environment.host
     return this.http.get<Product[]>(host+"/products?available=true");
+  }
+
+  searchProducts(keyword:string):Observable<Product[]>{
+    let host = environment.host
+    return this.http.get<Product[]>(host+"/products?name_like="+keyword);
   }
 
 

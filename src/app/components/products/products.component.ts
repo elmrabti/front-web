@@ -30,10 +30,37 @@ export class ProductsComponent {
       this.productsService.getAllProducts().pipe(
         map(data=>({dataState:DataStateEnum.LOADED, data:data})),
         startWith({dataState: DataStateEnum.LOADING}),
-        catchError(err => of({dataState: DataStateEnum.ERROR}))
+        catchError(err => of({dataState: DataStateEnum.ERROR, errorMessage: err.message}))
       );
 
   }
 
   // protected readonly DataStateEnum = DataStateEnum;
+  onGetSelectedProducts() {
+    this.products$=
+      this.productsService.getSelectedProducts().pipe(
+        map(data=>({dataState:DataStateEnum.LOADED, data:data})),
+        startWith({dataState: DataStateEnum.LOADING}),
+        catchError(err => of({dataState: DataStateEnum.ERROR, errorMessage: err.message}))
+      );
+  }
+
+  onGetAvailableProducts() {
+    this.products$=
+      this.productsService.getAvailableProducts().pipe(
+        map(data=>({dataState:DataStateEnum.LOADED, data:data})),
+        startWith({dataState: DataStateEnum.LOADING}),
+        catchError(err => of({dataState: DataStateEnum.ERROR, errorMessage: err.message}))
+      );
+  }
+
+  onSearch(dataForm: any) {
+    this.products$=
+      this.productsService.searchProducts(dataForm.keyword).pipe(
+        map(data=>({dataState:DataStateEnum.LOADED, data:data})),
+        startWith({dataState: DataStateEnum.LOADING}),
+        catchError(err => of({dataState: DataStateEnum.ERROR, errorMessage: err.message}))
+      );
+
+  }
 }

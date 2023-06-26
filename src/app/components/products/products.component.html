@@ -4,13 +4,29 @@
       <button (click)="onGetAllProducts()" class="btn btn-outline-info m-lg-2">All</button>
     </li>
     <li>
-      <button class="btn btn-outline-info m-lg-2">Selected</button>
+      <button (click)="onGetSelectedProducts()" class="btn btn-outline-info m-lg-2">Selected</button>
     </li>
     <li>
-      <button class="btn btn-outline-info m-lg-2">Available</button>
+      <button (click)="onGetAvailableProducts()" class="btn btn-outline-info m-lg-2">Available</button>
     </li>
   </ul>
+
+  <ul class="navbar navbar-nav m-lg-auto">
+    <li>
+      <form #f="ngForm" (ngSubmit)="onSearch(f.value)">
+        <div class="row">
+          <input ngModel name="keyword" type="text" class="col form-control">
+          <button class="btn btn-sm btn-outline-info col-md-3">
+            <span class="fa fa-search"></span>
+          </button>
+        </div>
+      </form>
+    </li>
+  </ul>
+
     </nav>
+
+<div class="container">
 
 <ng-container *ngIf="products$ | async as result"  [ngSwitch]="result.dataState">
 
@@ -19,7 +35,7 @@
   </ng-container>
 
   <ng-container *ngSwitchCase="DataStateEnum.ERROR">
-    <div class="alert-danger">
+    <div class="alert alert-danger">
       {{result.errorMessage}}
     </div>
   </ng-container>
@@ -45,11 +61,9 @@
     </table>
   </ng-container>
 
-
-
-
 </ng-container>
 
-<!--<div class="container" *ngIf="products$">-->
 
-<!--</div>-->
+</div>
+
+
